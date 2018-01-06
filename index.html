@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>New React Proj</title>
+    <script src="js/react.development.js"></script>
+    <script src="js/react-dom.development.js"></script>
+    <script src="js/babel.min.js"></script>
+  </head>
+  <body>
+
+    <header class="head">
+      <div class="container">
+        <h1> Notes</h1>
+        <h3>Simple notes app using React</h3>
+      </div>
+    </header>
+
+    <div id="root" class="container"></div>
+
+    <script type="text/babel">
+
+        class Note extends React.Component{
+          
+          state = {editing : 0};
+
+          editfunc = () => {
+            this.setState({ editing : true });
+          }
+
+          delfunc = () => {
+            this.props.deleteNote(this.props.index);
+          }
+
+          savefunc = () => {
+            var newtext = this.refs.edited.value;
+            this.props.editNote(newtext, this.props.index);
+            this.setState({ editing : false });
+          }
+
+          render(){
+            if(this.state.editing==true)
+              return (
+                <div>
+                  <textarea ref='edited' defaultValue={this.props.children}></textarea>
+                  <button onClick={this.savefunc}>Save</button>
+                  <button>Delete</button>
+                </div>)
+
+            else return (
+            <div>
+              <h1>{this.props.children}</h1>
+              <button onClick={this.editfunc}>Edit</button>
+              <button onClick={this.delfunc}>Delete</button>
+            </div>)
+          }
+        }
+
+        class Board extends React.Component{
+          state = { notes : [
+            "First try note",
+            'Hello world, this is Shashwat',
+            'Signing out, peace',
+          ]};
+
+          constructor(props, context){
+              super(props, context);
+              this.deletenote = this.deletenote.bind(this);
+              this.editnote = this.editnote.bind(this);
+          }
+
+          addnote = () => {
+            var arr = this.state.notes;
+            arr.push("yoyoyoyo");
+            this.setState({ notes : arr });
+          };
+
+          editnote = (newtext,i) => {
+            var arr = this.state.notes;
+            arr[i] = newtext;
+            this.setState({notes : arr});
+          };
+
+          deletenote = (i) => {
+            var arr = this.state.notes;
+            arr.splice(i,1);
+            this.setState({notes : arr});
+          };
+
+          eachnote(text,i){
+            return(
+              <Note key={i} index={i} deleteNote={this.deletenote} editNote={this.editnote}>
+                {text}
+              </Note>
+            );
+          }
+
+          render(){
+            return (
+              <div className="board">
+                {this.state.notes.map(this.eachnote, this)}
+                <br/>
+                <button onClick={this.addnote}>Add yoyoyoyo</button>
+              </div>
+            )
+          }
+        }
+
+        ReactDOM.render(<div>
+            <Board/>
+        </div>,document.getElementById('root'));
+
+    </script>
+
+  </body>
+</html>
