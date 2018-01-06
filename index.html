@@ -38,8 +38,13 @@
 
           savefunc = () => {
             var newtext = this.refs.edited.value;
-            this.props.editNote(newtext, this.props.index);
-            this.setState({ editing : false });
+            if(newtext.length<1){
+              alert("Please enter text to save!");
+            }
+            else{
+              this.props.editNote(newtext, this.props.index);
+              this.setState({ editing : false });
+            }
           }
 
           render(){
@@ -67,7 +72,7 @@
 
         class Board extends React.Component{
           state = { notes : [
-            'Hello world, this is Shashwat',
+            'Hello world! This is Shashwat Uttam',
           ]};
 
           constructor(props, context){
@@ -77,10 +82,16 @@
           }
 
           addnote = () => {
-            var arr = this.state.notes;
-            arr.push(this.refs.inputnote.value);
-            this.setState({ notes : arr });
-            document.getElementById("inputnote").value = "";
+            var newtext = this.refs.inputnote.value;
+            if(newtext.length<1){
+              alert("Please enter text to save!");
+            }
+            else{
+              var arr = this.state.notes;
+              arr.push(newtext);
+              this.setState({ notes : arr });
+              document.getElementById("inputnote").value = "";
+            }
           };
 
           editnote = (newtext,i) => {
