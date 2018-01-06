@@ -3,17 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <title>New React Proj</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <script src="js/react.development.js"></script>
     <script src="js/react-dom.development.js"></script>
     <script src="js/babel.min.js"></script>
   </head>
+
   <body>
 
-    <header class="head">
+    <header>
+    <div class="jumbotron">
       <div class="container">
-        <h1> Notes</h1>
-        <h3>Simple notes app using React</h3>
+        <h1 class="display-4">Notes</h1>
+        <p class="lead">Simple notes app using React.</p>
       </div>
+    </div>
     </header>
 
     <div id="root" class="container"></div>
@@ -41,26 +45,29 @@
           render(){
             if(this.state.editing==true)
               return (
-                <div>
-                  <textarea ref='edited' defaultValue={this.props.children}></textarea>
-                  <button onClick={this.savefunc}>Save</button>
-                  <button>Delete</button>
+                <div className="card m-3">
+                  <div className="card-body">
+                    <textarea className="form-control" rows="2" ref='edited' defaultValue={this.props.children}></textarea>
+                    <button className="btn btn-outline-success my-3" onClick={this.savefunc}>Save</button>
+                  </div>
                 </div>)
 
             else return (
-            <div>
-              <h1>{this.props.children}</h1>
-              <button onClick={this.editfunc}>Edit</button>
-              <button onClick={this.delfunc}>Delete</button>
+            <div className="card my-3">
+              <div className="card-body">
+                <h5 className="card-title">{this.props.children}</h5>
+                <div className="btn-group" role="group">
+                  <button className="btn btn-outline-info" onClick={this.editfunc}>Edit</button>
+                  <button className="btn btn-outline-danger" onClick={this.delfunc}>Delete</button>
+                </div>
+              </div>
             </div>)
           }
         }
 
         class Board extends React.Component{
           state = { notes : [
-            "First try note",
             'Hello world, this is Shashwat',
-            'Signing out, peace',
           ]};
 
           constructor(props, context){
@@ -71,8 +78,9 @@
 
           addnote = () => {
             var arr = this.state.notes;
-            arr.push("yoyoyoyo");
+            arr.push(this.refs.inputnote.value);
             this.setState({ notes : arr });
+            document.getElementById("inputnote").value = "";
           };
 
           editnote = (newtext,i) => {
@@ -97,10 +105,17 @@
 
           render(){
             return (
-              <div className="board">
-                {this.state.notes.map(this.eachnote, this)}
+              <div>
+                <div className="row">
+                  <div className="col-sm-10">
+                    <input type="text" ref="inputnote" id="inputnote" className="form-control form-control-lg my-3" placeholder="Add a note!"/>
+                  </div>
+                  <div className="col-sm-2">
+                    <button type="submit" className="btn btn-lg btn-primary my-3" onClick={this.addnote}>Add</button>
+                  </div>
+                </div>
                 <br/>
-                <button onClick={this.addnote}>Add yoyoyoyo</button>
+                {this.state.notes.map(this.eachnote, this)}
               </div>
             )
           }
@@ -111,6 +126,12 @@
         </div>,document.getElementById('root'));
 
     </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
 
   </body>
 </html>
